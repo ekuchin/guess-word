@@ -11,9 +11,16 @@
 
     <p>Текущая попытка: {{currentAttempt}}</p>
 
-    <input v-model="currentAttempt"/> 
-    <h3>Здесь будет клавиатура</h3>
-    <button @click="addAttempt">+attempt</button>
+    <input v-model="currentAttempt"/><p/>
+    
+    <div v-for="row in keyboard" :key="row">  
+       <button v-for="button in row" :key="button" @click="addLetter(button)">{{button}}</button>
+    </div>   
+    
+    <div>
+      <button @click="addAttempt">+attempt</button>
+    </div>
+    
   </div>
 </template>
 
