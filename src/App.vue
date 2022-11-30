@@ -1,23 +1,24 @@
 <template>
-  <div>
+  <div class="app">
     <p>Текущее слово: {{currentWord}}</p>
-    <p>Список попыток: {{attempts}}</p>
-    
-    <div v-for="item in attempts" :key="item">  
-      <Attempt :word="item"/>
+        
+    <div class="attempts" v-for="item, index in attempts" :key="index">  
+      <div class="letter computed" v-for="letter,index in item" :key="index">
+        {{letter}}
+      </div>
     </div>
-    <div></div>
-
-    <p>Текущая попытка: {{currentAttempt}}</p>
-
-    <input v-model="currentAttempt"/><p/>
     
-    <div v-for="row in keyboard" :key="row">  
-       <button v-for="button in row" :key="button" @click="addLetter(button)">{{button}}</button>
+    <div class="letter" v-for="letter,index in currentWord" :key="index">
+        {{currentAttempt[index]}}
+      </div>
+    
+    <div class="keyboard" v-for="row in keyboard" :key="row">  
+       <button class="button" v-for="button in row" :key="button" @click="addLetter(button)">{{button}}</button>
     </div>   
     
     <div>
-      <button @click="addAttempt">Отправить</button>
+      <button class="button" @click="deleteLetter">Удалить</button>
+      <button class="button computed" @click="addAttempt">Отправить</button>
     </div>
     
   </div>
@@ -25,11 +26,9 @@
 
 <script lang="ts">
 import {defineComponent}from 'vue'
-import Attempt from './components/Attempt.vue'
 import {useWords} from './service/useWords'
 
 export default defineComponent({
-  components:{Attempt},
   setup(){   
     return {...useWords()}
   }
@@ -51,5 +50,14 @@ export default defineComponent({
 div {
   float: inline;
   border: 1px dotted black;
+}
+
+.letter {
+  background-color: bisque;
+  margin: 2px;
+  padding: 2px;
+  border: 1px solid darkblue;
+  width: min-content;
+  display: inline-block;
 }
 </style>

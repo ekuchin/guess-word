@@ -1,0 +1,36 @@
+.app {
+
+}
+
+.attempt {
+
+}
+
+.letter {
+    background-color: bisque;
+    margin: 2px;
+    padding: 2px;
+    border: 1px solid darkblue;
+    width: min-content;
+    display: inline-block;
+}
+
+.correct {
+
+}
+
+.present {
+
+}
+
+.keyboard {
+
+}
+
+.button {
+
+}
+
+.enabled {
+
+}
