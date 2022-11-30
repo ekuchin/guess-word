@@ -13,7 +13,10 @@ export function useWords(){
     ]
 
     const addLetter = (letter:string) => {
+      if (currentAttempt.value.length < currentWord.length){
         currentAttempt.value += letter
+      }
+      
     }
 
     const addAttempt = () => {

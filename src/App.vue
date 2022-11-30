@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>Список попыток</h3>
     <p>Текущее слово: {{currentWord}}</p>
     <p>Список попыток: {{attempts}}</p>
     
@@ -18,7 +17,7 @@
     </div>   
     
     <div>
-      <button @click="addAttempt">+attempt</button>
+      <button @click="addAttempt">Отправить</button>
     </div>
     
   </div>
