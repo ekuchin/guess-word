@@ -29,7 +29,7 @@ import {defineComponent}from 'vue'
 import {useWords} from './service/useWords'
 
 export default defineComponent({
-  setup(){   
+  setup(){ 
     return {...useWords()}
   }
 })

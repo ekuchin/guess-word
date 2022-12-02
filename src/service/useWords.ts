@@ -4,7 +4,7 @@ import wordslist from '../data/wordslist'
 export function useWords(){
 
     const words = ref(wordslist)
-    const currentWord = "весна"
+    const currentWord = ref(wordslist[Math.floor(Math.random() * wordslist.length)])
     const attempts=ref([""])
     const currentAttempt = ref("")
 
@@ -13,7 +13,7 @@ export function useWords(){
     ]
 
     const addLetter = (letter:string) => {
-      if (currentAttempt.value.length < currentWord.length){
+      if (currentAttempt.value.length < currentWord.value.length){
         currentAttempt.value += letter
       }      
     }
