@@ -3,14 +3,18 @@ import wordslist from '../data/wordslist'
 
 export function useWords(){
 
-    const words = ref(wordslist)
-    const currentWord = ref(wordslist[Math.floor(Math.random() * wordslist.length)])
+    //const words = wordslist)
+    const currentWord = ref(wordslist[Math.floor(Math.random() * wordslist.length)].toString())
     const attempts=ref([""])
     const currentAttempt = ref("")
 
     const keyboard =[
       "ЙЦУКЕНГШЩЗХЪ", "ФЫВАПРОЛДЖЭ", "ЯЧСМИТЬБЮ"
     ]
+
+    //const generateRandomWord = ()=>{     
+    //  currentWord.value = words.value[Math.floor(Math.random() * words.value.length)].toString()
+   // }
 
     const addLetter = (letter:string) => {
       if (currentAttempt.value.length < currentWord.value.length){
@@ -29,5 +33,10 @@ export function useWords(){
         currentAttempt.value = "" 
     }
 
-    return { words, currentWord, attempts, currentAttempt, addLetter, deleteLetter, addAttempt, keyboard }
+    return {
+       currentWord, keyboard,
+       attempts, currentAttempt,
+       //generateRandomWord,
+       addLetter, deleteLetter, addAttempt
+        }
 }

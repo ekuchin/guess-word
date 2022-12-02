@@ -3,7 +3,7 @@
     <p>Текущее слово: {{currentWord}}</p>
         
     <div class="attempts" v-for="item, index in attempts" :key="index">  
-      <div class="letter computed" v-for="letter,index in item" :key="index">
+      <div :class="getLetterClass(currentWord,letter, index)" v-for="letter,index in item" :key="index">
         {{letter}}
       </div>
     </div>
@@ -29,8 +29,16 @@ import {defineComponent}from 'vue'
 import {useWords} from './service/useWords'
 
 export default defineComponent({
-  setup(){ 
-    return {...useWords()}
+  setup(){
+
+    const getLetterClass = (currentWord:string, letter:string, index:number)=>{
+      
+      let modifier:string = currentWord.charAt(index)=== letter.toLowerCase() ? " correct" : ""
+    
+      return "letter"+modifier
+    }
+
+    return {...useWords(), getLetterClass}
   }
 })
 </script>
@@ -60,4 +68,14 @@ div {
   width: min-content;
   display: inline-block;
 }
+.correct{
+  background-color:aqua;
+}
+
+.present{
+  background-color: cadetblue;
+}
+
 </style>
+
+
