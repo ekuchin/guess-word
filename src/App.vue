@@ -1,9 +1,8 @@
 <template>
   <div class="app">
     <p>Текущее слово: {{currentWord}}</p>
-        
     <div class="attempts" v-for="item, index in attempts" :key="index">  
-      <div :class="getLetterClass(currentWord,letter, index)" v-for="letter,index in item" :key="index">
+      <div :class="'letter '+getLetterClass(currentWord, item, index)" v-for="letter,index in item" :key="index">
         {{letter}}
       </div>
     </div>
@@ -12,10 +11,12 @@
         {{currentAttempt[index]}}
       </div>
     
-    <div class="keyboard" v-for="row in keyboard" :key="row">  
-       <button class="button" v-for="button in row" :key="button" @click="addLetter(button)">{{button}}</button>
-    </div>   
-    
+    <div class="keyboard">
+      <div class="keyboardRow" v-for="row in keyboard" :key="row">  
+        <button class="keyboardButton" v-for="button in row" :key="button" @click="addLetter(button)">{{button}}</button>
+      </div>   
+    </div>
+
     <div>
       <button class="button" @click="deleteLetter">Удалить</button>
       <button class="button computed" @click="addAttempt">Отправить</button>
@@ -31,11 +32,29 @@ import {useWords} from './service/useWords'
 export default defineComponent({
   setup(){
 
-    const getLetterClass = (currentWord:string, letter:string, index:number)=>{
+    const getLetterClass = (currentWord:string, item:string, index:number)=>{      
+      let letter = item[index].toLowerCase()
+      if (currentWord.charAt(index)=== letter){
+        return "correct"
+      }
       
-      let modifier:string = currentWord.charAt(index)=== letter.toLowerCase() ? " correct" : ""
-    
-      return "letter"+modifier
+      if (currentWord.indexOf(letter)!=-1){
+      //TODO из количества букв в слове вычесть те, что угаданы и столько первых букв присутствующих показать.
+      let letter = item[index].toLowerCase()
+      const sameLetters = currentWord.split(letter).length-1
+      const correctPositions = currentWord.split("")
+                                .map((element, currentIndex)=>{
+                                  return element.toUpperCase() === item[currentIndex] && element === letter ? currentIndex : null                                 
+                                })
+                                .filter(el=>el!=null)
+      const presentPositions = item.toLowerCase().split("")
+                                .map((element, currentIndex)=>{
+                                  return currentWord.indexOf(element)>-1 && element == letter && correctPositions.indexOf(currentIndex)==-1 ? currentIndex : null
+                                })
+                                .filter(el=>el!=null)     
+      return presentPositions.slice(0,sameLetters - correctPositions.length).indexOf(index)>-1 ? "present" : ""
+      }
+      return ""
     }
 
     return {...useWords(), getLetterClass}
@@ -44,36 +63,48 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
 div {
   float: inline;
-  border: 1px dotted black;
+  /* border: 1px dotted black; */
 }
 
 .letter {
   background-color: bisque;
-  margin: 2px;
-  padding: 2px;
-  border: 1px solid darkblue;
+  font-size: 1.5em;
+  margin: 5px;
+  
+  padding: 5px;
+  padding-top:9px;
+  /*border: 1px solid darkblue;*/
   width: min-content;
   display: inline-block;
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 8px;
+  text-align: center;
+
+  justify-content: center; /*Центрирование по горизонтали*/
+  align-items: center;
 }
 .correct{
-  background-color:aqua;
+  background-color: #339476;
+  color: #eaebed;
 }
 
 .present{
-  background-color: cadetblue;
+  background-color:#87e1c7;
+  color: #41436a;  
+}
+
+.keyboard{
+  border: 1px solid darkblue;
+  border-radius: 4px;
+}
+
+.button{
+  background-color: bisque;
+  margin: 10px;
+  border: 1px solid darkblue;
 }
 
 </style>
