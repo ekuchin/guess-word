@@ -2,7 +2,7 @@
   <div class="app">
     <p>Текущее слово: {{currentWord}}</p>
     <div class="attempts" v-for="item, index in attempts" :key="index">  
-      <div :class="'letter '+getLetterClass(currentWord, item, index)" v-for="letter,index in item" :key="index">
+      <div :class="'letter '+letterClass(currentWord, item, index)" v-for="letter,index in item" :key="index">
         {{letter}}
       </div>
     </div>
@@ -18,8 +18,9 @@
     </div>
 
     <div>
+      <button class="button" @click="startGame">Start</button>
       <button class="button" @click="deleteLetter">Удалить</button>
-      <button class="button computed" @click="addAttempt">Отправить</button>
+      <button :class="'button '+ (!submitAllowed() ? 'disabled' : '')" @click="submitAttempt">Отправить</button>
     </div>
     
   </div>
@@ -32,7 +33,7 @@ import {useWords} from './service/useWords'
 export default defineComponent({
   setup(){
 
-    const getLetterClass = (currentWord:string, item:string, index:number)=>{      
+    const letterClass = (currentWord:string, item:string, index:number)=>{      
       let letter = item[index].toLowerCase()
       if (currentWord.charAt(index)=== letter){
         return "correct"
@@ -57,7 +58,8 @@ export default defineComponent({
       return ""
     }
 
-    return {...useWords(), getLetterClass}
+    //startGame()
+    return {...useWords(), letterClass}
   }
 })
 </script>
@@ -106,6 +108,14 @@ div {
   margin: 10px;
   border: 1px solid darkblue;
 }
+
+.disabled{
+  background-color: gray;
+  border: 1px dashed darkblue;
+  color:#eaebed;
+  cursor: not-allowed;
+}
+
 
 </style>
 

@@ -3,24 +3,18 @@ import wordslist from '../data/wordslist'
 
 export function useWords(){
 
-    //const words = wordslist)
-    const currentWord = ref(wordslist[Math.floor(Math.random() * wordslist.length)].toString())
-    const attempts=ref([""])
-    const currentAttempt = ref("")
+  const keyboard =["ЙЦУКЕНГШЩЗХЪ", "ФЫВАПРОЛДЖЭ", "ЯЧСМИТЬБЮ"]
 
-    const keyboard =[
-      "ЙЦУКЕНГШЩЗХЪ", "ФЫВАПРОЛДЖЭ", "ЯЧСМИТЬБЮ"
-    ]
+  const currentWord = ref("")
+  const attempts=ref([""])
+  const currentAttempt = ref("")
+  const gameInProgress = ref(true)  
 
-    //const generateRandomWord = ()=>{     
-    //  currentWord.value = words.value[Math.floor(Math.random() * words.value.length)].toString()
-   // }
-
-    const addLetter = (letter:string) => {
-      if (currentAttempt.value.length < currentWord.value.length){
-        currentAttempt.value += letter
-      }      
-    }
+  const addLetter = (letter:string) => {
+    if (currentAttempt.value.length < currentWord.value.length){
+      currentAttempt.value += letter
+    }      
+  }
 
     const deleteLetter = () => {
       if (currentAttempt.value.length >0){
@@ -28,15 +22,27 @@ export function useWords(){
       }      
     }
 
-    const addAttempt = () => {
-        attempts.value = [...attempts.value, currentAttempt.value]
-        currentAttempt.value = "" 
+    const submitAttempt = () => {
+      if (!submitAllowed()) return  
+      attempts.value = [...attempts.value, currentAttempt.value]
+      currentAttempt.value = "" 
     }
 
+    const submitAllowed = ()=>{
+      return currentAttempt.value.length === currentWord.value.length
+    }
+
+    const startGame = () => {     
+      gameInProgress.value = true
+      currentWord.value = wordslist[Math.floor(Math.random() * wordslist.length)].toString()
+    }
+
+    startGame()
+
     return {
-       currentWord, keyboard,
-       attempts, currentAttempt,
-       //generateRandomWord,
-       addLetter, deleteLetter, addAttempt
-        }
+      keyboard,
+      currentWord, gameInProgress, startGame,
+      attempts, currentAttempt, submitAttempt, submitAllowed,
+      addLetter, deleteLetter, 
+    }
 }
