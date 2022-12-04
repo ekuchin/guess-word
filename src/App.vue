@@ -1,26 +1,30 @@
 <template>
   <div class="app">
     <p>Текущее слово: {{currentWord}}</p>
+    <p>{{gameInProgress}}</p>
+
     <div class="attempts" v-for="item, index in attempts" :key="index">  
       <div :class="'letter '+letterClass(currentWord, item, index)" v-for="letter,index in item" :key="index">
         {{letter}}
       </div>
     </div>
     
-    <div class="letter" v-for="letter,index in currentWord" :key="index">
+    <div v-show="gameInProgress" class="letter" v-for="letter,index in currentWord" :key="index">
         {{currentAttempt[index]}}
       </div>
     
-    <div class="keyboard">
+    <div class="keyboard" v-show="gameInProgress">
       <div class="keyboardRow" v-for="row in keyboard" :key="row">  
         <button class="keyboardButton" v-for="button in row" :key="button" @click="addLetter(button)">{{button}}</button>
       </div>   
     </div>
 
-    <div>
-      <button class="button" @click="startGame">Start</button>
+    <div v-show="gameInProgress">
       <button class="button" @click="deleteLetter">Удалить</button>
-      <button :class="'button '+ (!submitAllowed() ? 'disabled' : '')" @click="submitAttempt">Отправить</button>
+      <button  :class="'button '+ (!submitAllowed() ? 'disabled' : '')" @click="submitAttempt">Отправить</button>
+    </div>
+    <div>
+      <button class="button" @click="startGame">Новая игра</button>
     </div>
     
   </div>
