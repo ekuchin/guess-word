@@ -1,7 +1,9 @@
 <template>
   <div class="app">
-    <p>Текущее слово: {{currentWord}}</p>
-    <p>{{gameInProgress}}</p>
+    <!-- <p>Текущее слово: {{currentWord}}</p>
+    <p>{{gameInProgress}}</p> -->
+
+     <!-- {{testClass(currentWord, attempts, 'А')}} -->
 
     <div class="attempts" v-for="item, index in attempts" :key="index">  
       <div :class="'letter '+letterClass(currentWord, item, index)" v-for="letter,index in item" :key="index">
@@ -15,7 +17,7 @@
     
     <div class="keyboard" v-show="gameInProgress">
       <div class="keyboardRow" v-for="row in keyboard" :key="row">  
-        <button class="keyboardButton" v-for="button in row" :key="button" @click="addLetter(button)">{{button}}</button>
+        <button :class="('keyboardButton '+buttonClass(currentWord, attempts, button))" v-for="button in row" :key="button" @click="addLetter(button)">{{button}}</button>
       </div>   
     </div>
 
@@ -62,8 +64,16 @@ export default defineComponent({
       return ""
     }
 
-    //startGame()
-    return {...useWords(), letterClass}
+    const buttonClass = (currentWord:string, attempts:string[], letter:string) => {
+      
+      const allLetters = attempts.join("").split("")
+      const presentLetters = Array.from(new Set(allLetters))
+      if (presentLetters.indexOf(letter)!=-1 && currentWord.indexOf(letter.toLowerCase())!=-1){return "present"}
+      if (presentLetters.indexOf(letter)!=-1){return "absent"}
+      return ""
+    }
+   
+    return {...useWords(), letterClass, buttonClass}
   }
 })
 </script>
@@ -111,6 +121,10 @@ div {
   background-color: bisque;
   margin: 10px;
   border: 1px solid darkblue;
+}
+
+.absent{
+  background-color: bisque;
 }
 
 .disabled{
