@@ -9,7 +9,10 @@ export function useWords(){
   const attempts=ref([""])
   const currentAttempt = ref("")
   const gameInProgress = ref(false)  
+  const currentLevel = ref(0)
 
+  const setLevel = (level:number) => {currentLevel.value = level}
+ 
   const addLetter = (letter:string) => {
     if (currentAttempt.value.length < currentWord.value.length){
       currentAttempt.value += letter
@@ -37,7 +40,11 @@ export function useWords(){
 
     const startGame = () => {     
       gameInProgress.value = true
-      currentWord.value = wordslist[Math.floor(Math.random() * wordslist.length)].toString()
+      const wordsArray = currentLevel.value == 0 ? wordslist : wordslist.filter(
+        (word) => {return word.length == currentLevel.value}
+      )
+      console.log(wordsArray[0])
+      currentWord.value = wordsArray[Math.floor(Math.random() * wordsArray.length)].toString()
       attempts.value = []
       currentAttempt.value = ""
     }
@@ -47,6 +54,7 @@ export function useWords(){
     return {
       keyboard,
       currentWord, gameInProgress, startGame,
+      currentLevel, setLevel,
       attempts, currentAttempt, submitAttempt, submitAllowed,
       addLetter, deleteLetter, 
     }

@@ -27,6 +27,14 @@
     </div>
     <div>
       <button class="button" @click="startGame">Новая игра</button>
+      
+      <button 
+        :class="'button '+levelClass(level, currentLevel)" 
+        v-for="level in levels"
+        key="level"
+        @click="setLevel(level)">
+        {{ level == 0 ? "Все" : level }}
+      </button>
     </div>
     
   </div>
@@ -72,8 +80,17 @@ export default defineComponent({
       if (presentLetters.indexOf(letter)!=-1){return "absent"}
       return ""
     }
+
+    const levelClass = (level:number, currentLevel:number) => {
+      return level == currentLevel ? "disabled" : ""
+    }
    
-    return {...useWords(), letterClass, buttonClass}
+    let levels = [0]
+    for (let i = 4; i <= 14; i++) {
+      levels.push(i);
+    }   
+
+    return {...useWords(), letterClass, buttonClass, levelClass, levels}
   }
 })
 </script>
